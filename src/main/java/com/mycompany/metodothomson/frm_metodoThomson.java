@@ -189,7 +189,6 @@ public class frm_metodoThomson extends javax.swing.JFrame {
         JFileChooser selector = new JFileChooser();
         selector.setDialogTitle("Selecciona el archivo de expresiones (.txt)");
 
-        // Mostramos el diálogo para abrir archivo
         if (selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File archivo = selector.getSelectedFile();
             listaExpresiones = new ArrayList<>();
@@ -227,7 +226,6 @@ public class frm_metodoThomson extends javax.swing.JFrame {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
                 String linea;
                 while ((linea = br.readLine()) != null) {
-                    // Solo agregamos la línea a la lista si no está vacía o compuesta solo de espacios.
                     if (!linea.trim().isEmpty()) {
                         listaCadenas.add(linea);
                     }
@@ -242,28 +240,23 @@ public class frm_metodoThomson extends javax.swing.JFrame {
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
         // TODO add your handling code here:
-        // 1. Validar que los datos estén cargados
         if (listaExpresiones == null || listaExpresiones.isEmpty() ||
             listaCadenas == null || listaCadenas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debes cargar primero un archivo de expresiones y uno de cadenas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // 2. Preparar estructuras para resultados
+        
         HashMap<String, Integer> resumenConteo = new HashMap<>();
         HashMap<String, ArrayList<String>> detalleCoincidencias = new HashMap<>();
 
-        // 3. Inicializar las estructuras
         for (String exp : listaExpresiones) {
             resumenConteo.put(exp, 0);
             detalleCoincidencias.put(exp, new ArrayList<>());
         }
-
-        // 4. Procesar cada cadena contra cada expresión
+        
         for (String cadena : listaCadenas) {
             for (String exp : listaExpresiones) {
                 try {
-                    // Usamos Pattern.matches() que es un atajo para compilar y hacer match completo
                     if (Pattern.matches(exp, cadena)) {
                         resumenConteo.put(exp, resumenConteo.get(exp) + 1);
                         detalleCoincidencias.get(exp).add(cadena);
